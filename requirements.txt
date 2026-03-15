@@ -2,4 +2,8 @@ pandas
 numpy
 scikit-learn
 catboost
+
+pydantic 
+pydantic-settings
+python-dotenv
 xgboost==1.7.6
