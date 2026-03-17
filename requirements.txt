@@ -6,4 +6,10 @@ catboost
 pydantic 
 pydantic-settings
 python-dotenv
+
+fastapi
+uvicorn
+python-multipart 
+jinja2
+
 xgboost==1.7.6

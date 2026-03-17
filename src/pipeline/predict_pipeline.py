@@ -73,22 +73,23 @@ class CustomData:
         
 
 
-if __name__ == "__main__":
-    data = CustomData(
-        gender="Male",
-        age=45,
-        hypertension=1,
-        heart_disease=0,
-        smoking_history="Never",
-        bmi=28.5,
-        HbA1c_level=6.5,
-        blood_glucose_level=180
-    )
-    df = data.get_data_as_dataframe()
+# if __name__ == "__main__":
+#     data = CustomData(
+#         gender="Male",
+#         age=45,
+#         hypertension=1,
+#         heart_disease=0,
+#         smoking_history="Never",
+#         bmi=28.5,
+#         HbA1c_level=6.5,
+#         blood_glucose_level=180
+#     )
+#     df = data.get_data_as_dataframe()
     
 
-    prediction_pipeline = PredictPipeline()
-    pred = prediction_pipeline.predict(df)
-    print(f"Predicted class: {pred[0]}")
-    
+#     prediction_pipeline = PredictPipeline()
+#     pred = prediction_pipeline.predict(df)
+#     print(f"Predicted class: {pred}")
+
+
 
