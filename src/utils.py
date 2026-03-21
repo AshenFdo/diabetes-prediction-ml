@@ -9,6 +9,8 @@ import sys
 from sklearn.metrics import  accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import GridSearchCV
 
+from src.logger import logger as LOG
+
 
 from src.exceptions import CustomException
 
@@ -40,30 +42,19 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, params):
             y_test_pred = best_model.predict(X_test)
 
 
-            acc = accuracy_score(y_test, y_test_pred)
-            prec = precision_score(y_test, y_test_pred, average='weighted')
-            rec = recall_score(y_test, y_test_pred, average='weighted')
-            f1 = f1_score(y_test, y_test_pred, average='weighted')
 
-            report[model_name] = {
-                "Accuracy": acc,
-                "Precision": prec,
-                "Recall": rec,
-                "F1 Score": f1
-            }
+            model_f1 = f1_score(y_test, y_test_pred, average="weighted", zero_division=0)
+            report[model_name] = model_f1
+
+
             tuned_models[model_name] = best_model
+            LOG.info(f"{model_name} has F1 Score: {model_f1:.4f} with best parameters: {gs.best_params_}")
 
-            best_model_name = max(report, key=lambda x: report[x]['F1 Score'])
-            best_score = report[best_model_name]['F1 Score']
+        best_model_name = max(report, key=report.get)
+        best_score = report[best_model_name]
+        print(f"Best Model: {best_model_name} with F1 Score: {best_score:.4f}")
 
-            print(f"🏆 Best Model: {best_model_name} with F1 Score: {best_score:.4f}")
-
-
-            test_model_accuracy = accuracy_score(y_test, y_test_pred)
-            report[model_name] = test_model_accuracy
-            tuned_models[model_name] = best_model
-
-            return report, tuned_models
+        return report, tuned_models
 
 
 
