@@ -16,7 +16,7 @@ A machine learning web application that predicts whether a patient is **Diabetic
 
 | Layer | Tools |
 |---|---|
-| Web Framework | FastAPI, Jinja2 |
+| Web | FastAPI, JavaScript, HTML, CSS |
 | ML Libraries | scikit-learn, XGBoost, CatBoost |
 | Data Processing | pandas, NumPy |
 | Language | Python 3 |
