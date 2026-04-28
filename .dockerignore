@@ -1,0 +1,39 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+.env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Git
+.git
+.gitignore
+
+# Notebooks & dev files
+*.ipynb
+notebooks/
+
+# Artifacts - exclude data files, keep model
+artifacts/
+!artifacts/model.pkl
+!artifacts/preprocessor.pkl
+
+# Environment variables (secrets)
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Data folder (training data, not needed in Docker)
+data/
