@@ -1,12 +1,10 @@
-from pyexpat import model
-import re
 import sys
 import pandas as pd
-from xgboost.dask import predict
+
 
 from src.logger import logger as LOG
 from src.utils import load_object
-from src.exceptions import CustomException 
+from src.exceptions import CustomException
 
 
 class PredictPipeline:

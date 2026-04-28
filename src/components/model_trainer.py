@@ -1,5 +1,4 @@
 import os
-from pyexpat import model
 import sys
 from dataclasses import dataclass
 
@@ -12,9 +11,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from catboost import CatBoostClassifier
 
 
-from sklearn.metrics import  accuracy_score, precision_score, recall_score, f1_score
-import test
-from xgboost.dask import predict
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 from src.logger import logger as LOG
 from src.exceptions import CustomException

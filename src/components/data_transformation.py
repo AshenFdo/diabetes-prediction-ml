@@ -1,7 +1,5 @@
-from calendar import c
 import os
 import sys
-from unicodedata import numeric
 from src.logger import logger as LOG
 from src.exceptions import CustomException
 from dataclasses import dataclass

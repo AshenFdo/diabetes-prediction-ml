@@ -1,7 +1,6 @@
-import os 
+import os
 import sys
 
-from xgboost import data
 from src.logger import logger as LOG
 from src.exceptions import CustomException
 

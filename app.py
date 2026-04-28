@@ -15,7 +15,8 @@ templates = Jinja2Templates(directory="templates")
 async def read_form(request: Request):
    return templates.TemplateResponse(
     request=request,
-    name="index.html"
+    name="index.html",
+     context={"request": request}
 )
 
 
