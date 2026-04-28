@@ -1,0 +1,66 @@
+name: Build and Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main          # triggers on every push to main
+
+env:
+  AWS_REGION: eu-west-1 
+  ECR_REPOSITORY: diabetes-ml      # must match what you named it in ECR
+  APP_RUNNER_SERVICE: diabetes-ml  # you'll name your App Runner service this
+
+jobs:
+  deploy:
+    name: Build, Push, Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out your code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Log in to AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 3. Log in to ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 4. Build your Docker image and push to ECR
+      - name: Build, tag, and push image to ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}   # each commit gets a unique tag
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      # 5. Deploy to App Runner
+      - name: Deploy to App Runner
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          aws apprunner update-service \
+            --service-arn $(aws apprunner list-services \
+              --query "ServiceSummaryList[?ServiceName=='${{ env.APP_RUNNER_SERVICE }}'].ServiceArn" \
+              --output text) \
+            --source-configuration '{
+              "ImageRepository": {
+                "ImageIdentifier": "'$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG'",
+                "ImageConfiguration": {
+                  "Port": "8080"
+                },
+                "ImageRepositoryType": "ECR"
+              },
+              "AutoDeploymentsEnabled": false
+            }'
